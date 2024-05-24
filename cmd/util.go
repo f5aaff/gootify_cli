@@ -44,7 +44,7 @@ func playControls(args []*string) {
 }
 
 func deviceList() {
-	res, err := http.Get(baseURL + "devices")
+	res, err := http.Get(baseURL + "devices/list")
 	if err != nil {
 		fmt.Println("error getting devices" + err.Error())
 	}
@@ -77,6 +77,7 @@ func search() {
 	data.Tags = nil
 	data.Limit = limit
 	data.Types = types
+	data.Market = "ES"
 
 	payload, err := json.Marshal(data)
 	if err != nil {
@@ -87,5 +88,16 @@ func search() {
 		fmt.Println("error sending search request", err.Error())
 	}
 	body, err := io.ReadAll(res.Body)
-	fmt.Printf(string(body))
+	if err != nil {
+		fmt.Println("error reading response ", err.Error())
+	}
+	fmt.Println(string(body))
+	var resList *searchResponse
+	err = json.Unmarshal(body, resList)
+	if err != nil {
+		fmt.Println("error unmarshalling result ", err.Error())
+	}
+
+	//r := *resList
+	//tableprinter.Print(os.Stdout, r[0].Tracks.Items)
 }

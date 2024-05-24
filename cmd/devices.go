@@ -1,8 +1,20 @@
 package cmd
 
-import "github.com/spf13/cobra"
+import (
+	"fmt"
+	"gootify_cli/cmd/libfuncs"
+
+	"github.com/spf13/cobra"
+)
 
 var ()
+
+var deviceEndPoint = libfuncs.Devices{BasicEndPoint: &libfuncs.BasicEndPoint{}, EndPointStr: "devices"}
+
+func CurrentDevice() {
+	device := deviceEndPoint.GetItem()
+	fmt.Println(device)
+}
 
 var devicecmd = cobra.Command{
 	Use:   "device",
@@ -15,7 +27,7 @@ var devicecmd = cobra.Command{
 	Args: cobra.MaximumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) < 1 {
-			deviceList()
+			CurrentDevice()
 		}
 	},
 }
